@@ -9,7 +9,6 @@ import { CareerContext, Skill } from './types';
 
 const STORAGE_KEY = 'career_agent_portfolio_data';
 const ADMIN_ACCESS_KEY = 'career_portfolio_is_authorized';
-const ADMIN_UI_KEY = 'career_portfolio_show_admin_ui';
 
 const App: React.FC = () => {
   const [careerData, setCareerData] = useState<CareerContext>(() => {
@@ -39,14 +38,13 @@ const App: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const hasEditParam = params.get('edit') === 'true';
-    const uiPersisted = localStorage.getItem(ADMIN_UI_KEY) === 'true';
-    const authPersisted = localStorage.getItem(ADMIN_ACCESS_KEY) === 'true';
-
-    if (hasEditParam || uiPersisted) {
-      localStorage.setItem(ADMIN_UI_KEY, 'true');
-      setShowAdminButton(true);
-    }
     
+    // The button only shows if the URL explicitly has ?edit=true
+    setShowAdminButton(hasEditParam);
+    
+    // Authorization (password) is still persisted for convenience 
+    // so you don't have to re-login every refresh while editing.
+    const authPersisted = localStorage.getItem(ADMIN_ACCESS_KEY) === 'true';
     if (authPersisted) {
       setIsAuthorized(true);
     }
