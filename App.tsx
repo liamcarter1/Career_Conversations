@@ -5,7 +5,7 @@ import Skills from './components/Skills';
 import Experience from './components/Experience';
 import Chatbot from './components/Chatbot';
 import { INITIAL_CAREER_DATA } from './constants';
-import { CareerContext } from './types';
+import { CareerContext, Skill } from './types';
 
 const STORAGE_KEY = 'career_agent_portfolio_data';
 const ADMIN_ACCESS_KEY = 'career_portfolio_is_authorized';
@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const profileInputRef = useRef<HTMLInputElement>(null);
 
   // Hidden Access Logic
   useEffect(() => {
@@ -69,7 +70,7 @@ const App: React.FC = () => {
   const removeItem = (field: keyof CareerContext, id: string) => {
     setCareerData(prev => ({
       ...prev,
-      [field]: (prev[field] as any[]).filter((item: any) => item.id !== id && item.name !== id)
+      [field]: (prev[field] as any[]).filter((item: any) => item.id !== id)
     }));
   };
 
@@ -96,6 +97,18 @@ const App: React.FC = () => {
       reader.onloadend = () => {
         const base64String = reader.result as string;
         updateArrayItem('projects', index, { ...careerData.projects[index], imageUrl: base64String });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleProfileImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        handleUpdate('profileImageUrl', base64String);
       };
       reader.readAsDataURL(file);
     }
@@ -259,36 +272,85 @@ const App: React.FC = () => {
                    Restore from File
                  </button>
                  <input type="file" ref={fileInputRef} className="hidden" accept=".json" onChange={importData} />
-                 <p className="text-[8px] text-slate-500 italic text-center leading-tight">Use these to save your site content or move to another browser.</p>
                </div>
             </Section>
 
-            <Section title="Security" color="slate">
-               <Input 
-                label="Change Admin Password" 
-                type="password"
-                value={careerData.adminPassword || ''} 
-                onChange={v => handleUpdate('adminPassword', v)} 
-               />
-               <p className="text-[9px] text-slate-500 italic mt-1 leading-tight">Current password: {careerData.adminPassword}</p>
-            </Section>
-
             <Section title="Profile" color="blue">
-              <Input label="Name" value={careerData.name} onChange={v => handleUpdate('name', v)} />
-              <Input label="Headline" value={careerData.title} onChange={v => handleUpdate('title', v)} />
-              <Textarea label="Mission Bio" value={careerData.bio} onChange={v => handleUpdate('bio', v)} />
+              <div className="space-y-4">
+                <div className="flex flex-col items-center gap-4 p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+                  <img 
+                    src={careerData.profileImageUrl || `https://picsum.photos/seed/${careerData.name}/300/300`} 
+                    alt="Profile Preview" 
+                    className="w-24 h-24 rounded-2xl object-cover border-2 border-blue-500/30"
+                  />
+                  <label className="w-full cursor-pointer">
+                    <div className="py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-center text-[10px] font-black uppercase tracking-widest transition-colors">
+                      Change Profile Image
+                    </div>
+                    <input type="file" ref={profileInputRef} className="hidden" accept="image/*" onChange={handleProfileImageUpload} />
+                  </label>
+                </div>
+                <Input label="Full Name" value={careerData.name} onChange={v => handleUpdate('name', v)} />
+                <Input label="Professional Headline" value={careerData.title} onChange={v => handleUpdate('title', v)} />
+                <Textarea label="Mission Bio" value={careerData.bio} onChange={v => handleUpdate('bio', v)} />
+              </div>
             </Section>
 
-            <Section title="Competencies" color="emerald">
+            <Section title="Technical Expertise" color="emerald">
+              <div className="space-y-6">
+                {careerData.skills.map((skill, i) => (
+                  <div key={skill.id} className="p-4 bg-slate-900/50 rounded-xl border border-slate-800 space-y-3">
+                    <Input 
+                      label="Skill Name" 
+                      value={skill.name} 
+                      onChange={v => updateArrayItem('skills', i, { ...skill, name: v })} 
+                    />
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <label className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Expertise Level (%)</label>
+                        <span className="text-xs font-black text-blue-400">{skill.level}%</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        value={skill.level} 
+                        onChange={e => updateArrayItem('skills', i, { ...skill, level: parseInt(e.target.value) })}
+                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                      />
+                    </div>
+                    <Input 
+                      label="Category (e.g., frontend, ai)" 
+                      value={skill.category} 
+                      onChange={v => updateArrayItem('skills', i, { ...skill, category: v })} 
+                    />
+                    <button 
+                      onClick={() => removeItem('skills', skill.id)} 
+                      className="w-full py-1 text-red-400 text-[10px] uppercase font-bold tracking-widest border border-red-500/20 rounded mt-1 hover:bg-red-500/10 transition-colors"
+                    >
+                      Remove Skill
+                    </button>
+                  </div>
+                ))}
+                <button 
+                  onClick={() => addItem('skills', { name: 'New Skill', level: 50, category: 'general' })} 
+                  className="w-full py-2 bg-slate-800 border border-slate-700 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-300"
+                >
+                  + Add Skill
+                </button>
+              </div>
+            </Section>
+
+            <Section title="Core Competencies" color="cyan">
               <Textarea 
-                label="Core Skills (one per line)" 
+                label="Tags (one per line)" 
                 value={careerData.coreCompetencies.join('\n')} 
                 onChange={v => handleUpdate('coreCompetencies', v.split('\n').filter(s => s.trim()))} 
                 rows={6}
               />
             </Section>
 
-            <Section title="Experience" color="purple">
+            <Section title="Professional Experience" color="purple">
               {careerData.experience.map((exp, i) => (
                 <div key={exp.id} className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 mb-4 space-y-3">
                   <Input label="Company" value={exp.company} onChange={v => updateArrayItem('experience', i, { ...exp, company: v })} />
@@ -301,34 +363,17 @@ const App: React.FC = () => {
               <button onClick={() => addItem('experience', { company: 'New Company', role: 'Role', period: '2025', description: ['Achievement'], technologies: [] })} className="w-full py-2 bg-slate-800 border border-slate-700 rounded-lg text-[10px] font-bold mt-2 uppercase tracking-wider text-slate-300">+ Add Entry</button>
             </Section>
 
-            <Section title="Projects" color="pink">
-              {careerData.projects.map((proj, i) => (
-                <div key={proj.id} className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 mb-4 space-y-3">
-                  <Input label="Project Title" value={proj.title} onChange={v => updateArrayItem('projects', i, { ...proj, title: v })} />
-                  <div className="space-y-3">
-                    <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest ml-1">Card Image</label>
-                    <div className="flex items-center gap-4">
-                      {proj.imageUrl && (
-                        <img src={proj.imageUrl} alt="Preview" className="w-16 h-12 object-cover rounded border border-slate-700" />
-                      )}
-                      <label className="flex-1 cursor-pointer">
-                        <div className="w-full py-2 px-4 bg-slate-900 border border-slate-700 rounded-lg text-center text-[10px] font-black uppercase text-slate-400">Upload Screenshot</div>
-                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(i, e)} />
-                      </label>
-                    </div>
-                  </div>
-                  <Input label="Live Link" value={proj.link || ''} onChange={v => updateArrayItem('projects', i, { ...proj, link: v })} />
-                  <Textarea label="Short Info" value={proj.description} onChange={v => updateArrayItem('projects', i, { ...proj, description: v })} />
-                  <Input label="Tags (comma separated)" value={proj.tags.join(',')} onChange={v => updateArrayItem('projects', i, { ...proj, tags: v.split(',').map(s => s.trim()) })} />
-                  <button onClick={() => removeItem('projects', proj.id)} className="w-full py-1 text-red-400 text-[10px] uppercase font-bold tracking-widest border border-red-500/20 rounded mt-2 hover:bg-red-500/10 transition-colors">Remove</button>
-                </div>
-              ))}
-              <button onClick={() => addItem('projects', { title: 'New Build', description: 'Info...', imageUrl: '', link: '', tags: ['AI'] })} className="w-full py-2 bg-slate-800 border border-slate-700 rounded-lg text-[10px] font-bold mt-2 uppercase tracking-wider text-slate-300">+ Add Project</button>
+            <Section title="Security & Management" color="slate">
+               <div className="space-y-4">
+                 <Input 
+                  label="Change Admin Password" 
+                  type="password"
+                  value={careerData.adminPassword || ''} 
+                  onChange={v => handleUpdate('adminPassword', v)} 
+                 />
+                 <button onClick={handleReset} className="w-full py-3 px-4 bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-500/30 rounded-2xl text-[10px] uppercase font-bold tracking-tighter transition-all">Factory Reset Data</button>
+               </div>
             </Section>
-
-            <div className="pt-6 border-t border-slate-800">
-              <button onClick={handleReset} className="w-full py-4 px-4 bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-500/30 rounded-2xl text-[10px] uppercase font-bold tracking-tighter transition-all shadow-lg">Reset Default Data</button>
-            </div>
           </div>
         </div>
       )}

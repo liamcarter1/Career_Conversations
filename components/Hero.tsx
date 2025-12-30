@@ -18,7 +18,7 @@ const Hero: React.FC<HeroProps> = ({ data, onStartChat }) => {
         <div className="mb-6 inline-block relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
           <img 
-            src={`https://picsum.photos/seed/${data.name}/300/300`} 
+            src={data.profileImageUrl || `https://picsum.photos/seed/${data.name}/300/300`} 
             alt={data.name}
             className="relative w-32 h-32 md:w-48 md:h-48 rounded-2xl object-cover border-2 border-slate-700/50 shadow-2xl float-animation"
           />

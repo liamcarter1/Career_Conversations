@@ -15,7 +15,7 @@ export interface Experience {
 }
 
 export interface Skill {
-  id?: string;
+  id: string;
   name: string;
   level: number;
   category: string;
@@ -39,6 +39,7 @@ export interface CareerContext {
   name: string;
   title: string;
   bio: string;
+  profileImageUrl?: string;
   skills: Skill[];
   coreCompetencies: string[];
   experience: Experience[];
@@ -46,5 +47,5 @@ export interface CareerContext {
   socials: SocialLinks;
   detailedResumeContext: string;
   projectDeepDiveContext: string;
-  adminPassword?: string; // New field for security
+  adminPassword?: string;
 }

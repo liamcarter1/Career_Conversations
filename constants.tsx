@@ -5,7 +5,8 @@ export const INITIAL_CAREER_DATA: CareerContext = {
   name: "Liam Carter",
   title: "AI Engineer & Quality Manager",
   bio: "Quality Manager and AI Champion at Danfoss Power Solutions. I bridge the gap between industrial excellence and Generative AI. Beyond engineering, I'm an electronic music producer, DJ, and a connoisseur of Italian and Chinese cuisine.",
-  adminPassword: "liam2025", // Default password
+  profileImageUrl: "", // Empty defaults to placeholder logic
+  adminPassword: "liam2025",
   detailedResumeContext: `PROFESSIONAL DEVELOPMENT & COMPETENCY REPORT - LIAM CARTER
 Focus: AI Engineering, Data Science, and Full-Stack Python Development
 
@@ -71,12 +72,12 @@ DOMAIN D: FRONTEND DESIGN & UI/UX
     "Electronic Music Production"
   ],
   skills: [
-    { name: 'Python (Advanced)', level: 95, category: 'backend' },
-    { name: 'AI & LLM (RAG)', level: 92, category: 'ai' },
-    { name: 'ML / Data Science', level: 88, category: 'ai' },
-    { name: 'n8n Automation', level: 90, category: 'devops' },
-    { name: 'Music Tech / DSP', level: 82, category: 'creative' },
-    { name: 'SQL / Databases', level: 85, category: 'backend' },
+    { id: 's1', name: 'Python (Advanced)', level: 95, category: 'backend' },
+    { id: 's2', name: 'AI & LLM (RAG)', level: 92, category: 'ai' },
+    { id: 's3', name: 'ML / Data Science', level: 88, category: 'ai' },
+    { id: 's4', name: 'n8n Automation', level: 90, category: 'devops' },
+    { id: 's5', name: 'Music Tech / DSP', level: 82, category: 'creative' },
+    { id: 's6', name: 'SQL / Databases', level: 85, category: 'backend' },
   ],
   experience: [
     {
