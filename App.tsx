@@ -38,12 +38,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const hasEditParam = params.get('edit') === 'true';
-    
-    // The button only shows if the URL explicitly has ?edit=true
     setShowAdminButton(hasEditParam);
     
-    // Authorization (password) is still persisted for convenience 
-    // so you don't have to re-login every refresh while editing.
     const authPersisted = localStorage.getItem(ADMIN_ACCESS_KEY) === 'true';
     if (authPersisted) {
       setIsAuthorized(true);
@@ -357,6 +353,24 @@ const App: React.FC = () => {
               </div>
             </Section>
 
+            <Section title="Advanced Knowledge Base" color="cyan">
+              <div className="space-y-6">
+                <Textarea 
+                  label="Detailed Career Report (AI Champion File)" 
+                  value={careerData.detailedResumeContext} 
+                  onChange={v => handleUpdate('detailedResumeContext', v)} 
+                  rows={15}
+                  placeholder="Paste your full AI Champion / Career Report here..."
+                />
+                <Textarea 
+                  label="Project Deep Dive Context" 
+                  value={careerData.projectDeepDiveContext} 
+                  onChange={v => handleUpdate('projectDeepDiveContext', v)} 
+                  rows={8}
+                />
+              </div>
+            </Section>
+
             <Section title="Technical Expertise" color="emerald">
               <div className="space-y-6">
                 {careerData.skills.map((skill, i) => (
@@ -553,10 +567,10 @@ const Input: React.FC<{ label: string; value: string; onChange: (v: string) => v
   </div>
 );
 
-const Textarea: React.FC<{ label: string; value: string; onChange: (v: string) => void; rows?: number }> = ({ label, value, onChange, rows = 3 }) => (
+const Textarea: React.FC<{ label: string; value: string; onChange: (v: string) => void; rows?: number; placeholder?: string }> = ({ label, value, onChange, rows = 3, placeholder }) => (
   <div>
     <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2 ml-1">{label}</label>
-    <textarea rows={rows} value={value} onChange={e => onChange(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-[11px] outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all text-slate-300 font-sans leading-relaxed custom-scrollbar" />
+    <textarea rows={rows} value={value} placeholder={placeholder} onChange={e => onChange(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-[11px] outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all text-slate-300 font-sans leading-relaxed custom-scrollbar" />
   </div>
 );
 

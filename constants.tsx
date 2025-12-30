@@ -11,47 +11,30 @@ export const INITIAL_CAREER_DATA: CareerContext = {
 Focus: AI Engineering, Data Science, and Full-Stack Python Development
 
 1. EXECUTIVE SUMMARY
-This report outlines the technical competencies and certifications acquired through an intensive, multi-disciplinary curriculum focused on Artificial Intelligence, Software Engineering, and Data Science. The combined coursework represents over 200+ hours of hands-on training, transitioning from advanced Python programming to the deployment of autonomous AI Agents, Large Language Models (LLMs), and interactive web applications.
+This report outlines the technical competencies and certifications acquired through an intensive, multi-disciplinary curriculum focused on Artificial Intelligence, Software Engineering, and Data Science.
 
 2. TECHNICAL SKILLS MATRIX
 - Languages: Python (Advanced), SQL, HTML5, CSS3, JavaScript (Basic)
 - AI & LLMs: OpenAI API, LangChain, Hugging Face, RAG, QLoRA, Fine-Tuning, Vector Databases (Pinecone/Chroma)
 - Data Science: Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, Plotly, Dash
-- Machine Learning: Regression, Classification, Clustering, Neural Networks, Predictive Analytics
-- Web & Automation: Flask, Django, Bootstrap 5, WordPress, Elementor, n8n (Workflow Automation), REST APIs
-- Tools: Git/GitHub, Jupyter Notebooks, VS Code, Postman, Google Colab
 
-3. DETAILED COMPETENCY BREAKDOWN
+3. LATEST READING & CONTINUOUS LEARNING (AI CHAMPION LIST)
+- "Build a Large Language Model (From Scratch)" by Sebastian Raschka - Focus on transformer architecture.
+- "Generative AI with LangChain" by Ben Auffarth - Implementing complex RAG pipelines.
+- "Attention Is All You Need" (Research Paper) - Deep dive into self-attention mechanisms.
+- "Deep Learning for Quality Control" - Various journals on vision-based defect detection.
+- "The Coming Wave" by Mustafa Suleyman - Understanding the socio-economic impacts of AI.
+
+4. DETAILED COMPETENCY BREAKDOWN
 DOMAIN A: AI ENGINEERING & GENERATIVE AI
 - RAG: Building systems that connect LLMs to private data sources to reduce hallucinations.
 - Fine-Tuning: Using QLoRA to fine-tune open-source models (Llama 3, Mistral).
 - Agent Orchestration: Designing autonomous AI agents capable of planning and multi-step reasoning.
-- Vector Databases: Implementing vector storage for semantic search.
 
 DOMAIN B: DATA SCIENCE & MACHINE LEARNING
 - Statistical Foundations: Probability, distributions, A/B Testing.
 - Supervised Learning: Linear/Polynomial Regression, Decision Trees, Random Forests, SVM.
-- Unsupervised Learning: K-Means Clustering, PCA.
-- Deep Learning: Neural Networks and scaling ML models.
-- Data Visualization: Interactive charts (Plotly) and Dashboard Engineering (Dash).
-
-DOMAIN C: CORE PROGRAMMING & SOFTWARE ARCHITECTURE
-- Advanced Python: Decorators, Generators, Error Handling.
-- OOP: Class inheritance, polymorphism, encapsulation.
-- Web Development: Server-side applications using Flask and Django.
-- Automation: Selenium/BeautifulSoup for web scraping and API consumption.
-
-DOMAIN D: FRONTEND DESIGN & UI/UX
-- Responsive Design: Bootstrap Grid system for Mobile/Desktop.
-- Component Library: Modals, Navbars, Cards for rapid development.
-- Rapid Prototyping: Landing pages via WordPress & Elementor.
-
-4. PROJECT CAPABILITIES
-- Custom Knowledge Chatbot (RAG/Python)
-- Automated Lead Qualifier (n8n/LLM)
-- Financial Analytics Dashboard (Plotly/Dash)
-- Predictive Sales Model (Scikit-learn/NumPy)
-- Responsive AI Web App (Flask/Bootstrap 5)`,
+- Data Visualization: Interactive charts (Plotly) and Dashboard Engineering (Dash).`,
   projectDeepDiveContext: `PROJECT CAPABILITIES:
 1. AI-Powered PFMEA Generator: Generates Process Failure Mode Effects and Analysis documents from vision maps.
 2. AI Root Cause Analysis Application: Streamlines RCA for manufacturing issues.
