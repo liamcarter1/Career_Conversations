@@ -1,0 +1,8 @@
+{
+  "name": "Career Agent Portfolio",
+  "description": "A high-performance personal portfolio featuring an AI-powered career agent that answers questions about professional experience and skills.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
