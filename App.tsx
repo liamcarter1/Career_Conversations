@@ -90,7 +90,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleImageUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProjectImageUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -281,11 +281,11 @@ const App: React.FC = () => {
                   <img 
                     src={careerData.profileImageUrl || `https://picsum.photos/seed/${careerData.name}/300/300`} 
                     alt="Profile Preview" 
-                    className="w-24 h-24 rounded-2xl object-cover border-2 border-blue-500/30"
+                    className="w-24 h-24 rounded-2xl object-cover border-2 border-blue-500/30 shadow-lg"
                   />
                   <label className="w-full cursor-pointer">
-                    <div className="py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-center text-[10px] font-black uppercase tracking-widest transition-colors">
-                      Change Profile Image
+                    <div className="py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-center text-[10px] font-black uppercase tracking-widest transition-colors shadow-xl shadow-blue-600/20">
+                      Change Profile Picture
                     </div>
                     <input type="file" ref={profileInputRef} className="hidden" accept="image/*" onChange={handleProfileImageUpload} />
                   </label>
@@ -293,6 +293,69 @@ const App: React.FC = () => {
                 <Input label="Full Name" value={careerData.name} onChange={v => handleUpdate('name', v)} />
                 <Input label="Professional Headline" value={careerData.title} onChange={v => handleUpdate('title', v)} />
                 <Textarea label="Mission Bio" value={careerData.bio} onChange={v => handleUpdate('bio', v)} />
+              </div>
+            </Section>
+
+            <Section title="AI Build Spotlight" color="pink">
+              <div className="space-y-8">
+                {careerData.projects.map((proj, i) => (
+                  <div key={proj.id} className="p-4 bg-slate-900/50 rounded-2xl border border-slate-800 space-y-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex-1">
+                        <Input 
+                          label="Build Title" 
+                          value={proj.title} 
+                          onChange={v => updateArrayItem('projects', i, { ...proj, title: v })} 
+                        />
+                      </div>
+                      <div className="w-16 h-12 rounded border border-slate-700 overflow-hidden bg-slate-800">
+                        <img src={proj.imageUrl} className="w-full h-full object-cover" alt="" />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest ml-1">Card Image</label>
+                      <label className="block cursor-pointer">
+                        <div className="py-2 px-3 bg-slate-800 border border-slate-700 rounded-xl text-center text-[9px] font-black uppercase text-slate-400 hover:bg-slate-700 transition-colors">
+                          Upload Screenshot
+                        </div>
+                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleProjectImageUpload(i, e)} />
+                      </label>
+                    </div>
+
+                    <Input 
+                      label="Application URL (Live Link)" 
+                      value={proj.link || ''} 
+                      onChange={v => updateArrayItem('projects', i, { ...proj, link: v })} 
+                      placeholder="https://..."
+                    />
+                    
+                    <Textarea 
+                      label="Short Description" 
+                      value={proj.description} 
+                      onChange={v => updateArrayItem('projects', i, { ...proj, description: v })} 
+                    />
+                    
+                    <Input 
+                      label="Tags (comma separated)" 
+                      value={proj.tags.join(', ')} 
+                      onChange={v => updateArrayItem('projects', i, { ...proj, tags: v.split(',').map(t => t.trim()).filter(Boolean) })} 
+                    />
+
+                    <button 
+                      onClick={() => removeItem('projects', proj.id)} 
+                      className="w-full py-1 text-red-400 text-[10px] uppercase font-bold tracking-widest border border-red-500/20 rounded mt-1 hover:bg-red-500/10 transition-colors"
+                    >
+                      Delete Project
+                    </button>
+                  </div>
+                ))}
+                <button 
+                  onClick={() => addItem('projects', { title: 'New AI Build', description: 'Briefly explain what this tool does...', imageUrl: '', tags: ['AI', 'Python'], link: '' })} 
+                  className="w-full py-3 bg-pink-600/10 border border-pink-500/30 rounded-xl text-[10px] font-black uppercase tracking-widest text-pink-400 hover:bg-pink-600/20 transition-all"
+                >
+                  + Add New Project
+                </button>
               </div>
             </Section>
 
@@ -320,7 +383,7 @@ const App: React.FC = () => {
                       />
                     </div>
                     <Input 
-                      label="Category (e.g., frontend, ai)" 
+                      label="Category (e.g., backend, ai)" 
                       value={skill.category} 
                       onChange={v => updateArrayItem('skills', i, { ...skill, category: v })} 
                     />
@@ -394,18 +457,21 @@ const App: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {careerData.projects.map(proj => {
                 const Card = (
-                  <div className="group h-full flex flex-col glass rounded-[2.5rem] overflow-hidden hover:border-pink-500/40 transition-all duration-500 shadow-2xl">
+                  <div className={`group h-full flex flex-col glass rounded-[2.5rem] overflow-hidden transition-all duration-500 shadow-2xl ${proj.link ? 'hover:border-pink-500/40 cursor-pointer' : 'border-slate-700/50'}`}>
                     <div className="aspect-video overflow-hidden relative bg-slate-800">
                        <img 
                         src={proj.imageUrl || `https://picsum.photos/seed/${proj.id}/800/450`} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                         alt={proj.title} 
                        />
-                       <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="px-6 py-2.5 bg-pink-600 text-white rounded-full text-xs font-black uppercase tracking-widest shadow-xl">
-                            {proj.link ? 'Launch Live App' : 'View Details'}
-                          </span>
-                       </div>
+                       {proj.link && (
+                         <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span className="px-6 py-2.5 bg-pink-600 text-white rounded-full text-xs font-black uppercase tracking-widest shadow-xl flex items-center gap-2">
+                              Launch Live App
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                            </span>
+                         </div>
+                       )}
                     </div>
                     <div className="p-8 flex-1 flex flex-col">
                       <h3 className="font-black text-2xl mb-4 tracking-tight text-white uppercase group-hover:text-pink-400 transition-colors">{proj.title}</h3>
@@ -420,7 +486,7 @@ const App: React.FC = () => {
                 );
 
                 return proj.link ? (
-                  <a key={proj.id} href={proj.link} target="_blank" rel="noopener noreferrer" className="block h-full">
+                  <a key={proj.id} href={proj.link} target="_blank" rel="noopener noreferrer" className="block h-full no-underline">
                     {Card}
                   </a>
                 ) : (
@@ -482,10 +548,10 @@ const Section: React.FC<{ title: string; color: string; children: React.ReactNod
   );
 };
 
-const Input: React.FC<{ label: string; value: string; onChange: (v: string) => void; type?: string }> = ({ label, value, onChange, type = "text" }) => (
+const Input: React.FC<{ label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string }> = ({ label, value, onChange, type = "text", placeholder }) => (
   <div>
     <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2 ml-1">{label}</label>
-    <input type={type} value={value} onChange={e => onChange(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all text-slate-300 font-medium" />
+    <input type={type} placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all text-slate-300 font-medium placeholder:text-slate-700" />
   </div>
 );
 
